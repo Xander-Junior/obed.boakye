@@ -4,14 +4,15 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+//method to read airline information
 public class Airlines {
     String airline_id, airline_name, airline_alias, IATA_code, ICAO_code, callsign, country;
-
-    static HashMap<String, String> airlineID_country = new HashMap<>();
-
-
+    static HashMap<String, String> airlineID_IATA = new HashMap<>();
+    static HashMap<String, ArrayList> airlineHash = new HashMap<>();
+    static ArrayList<Airlines> airline_details = new ArrayList<>();
 
 
 
@@ -39,15 +40,18 @@ public class Airlines {
         return "Airline ID: " + airline_id + " Airline name: " + airline_name + " Airline Code: " + IATA_code + " Call Sign: " + callsign + " Country: " + country;
     }
 
+
     public static void airline_data() {
+
         BufferedReader br;
         String line;
         try {
             br = new BufferedReader(new FileReader("airlines.csv"));
             while ((line = br.readLine()) != null) {
                 String[] airline_info = line.split(",");
-                Airlines airline = new Airlines(airline_info[0], airline_info[1], airline_info[3], airline_info[5], airline_info[6]);
-                airlineID_country.put(airline.country, airline.airline_id);
+                Airlines airline = new Airlines(airline_info[0], airline_info[1], airline_info[4], airline_info[5], airline_info[6]);
+                Airlines.airlineID_IATA.put(airline_info[0], airline_info[2]);
+                airline_details.add(airline);
 
             }
         } catch (FileNotFoundException fe) {
@@ -60,12 +64,12 @@ public class Airlines {
 
     }
 
+
+
+
     public static void main(String[] args) {
-        Airlines.airline_data();
-        System.out.println(Airlines.airlineID_country);
-        System.out.println(airlineID_country.get("Papua New Guinea"));
-
-
+        airline_data();
+//        System.out.println(airline_details.get(1018));
 
     }
 }
