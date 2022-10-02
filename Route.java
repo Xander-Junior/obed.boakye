@@ -11,8 +11,12 @@ public class Route {
 
     String airline_code, airline_id, sourceAirportCode, sourceAirportId, destinationAirportCode, destinationAirportId, stops;
     static HashMap<String, ArrayList> routeHash = new HashMap<>();
+    static HashMap<String, String> portLine = new HashMap<>();
     private static ArrayList<Route> route_details = new ArrayList<>();
     static HashMap<String, ArrayList<Route>> airport_route = new HashMap<>();
+    static HashMap<String, String> locationIATA = new HashMap<>();
+    static String[] route_info;
+
 
 
 //
@@ -64,7 +68,8 @@ public class Route {
         try {
             br = new BufferedReader(new FileReader("routes.csv"));
             while ((line = br.readLine()) != null) {
-                String[] route_info = line.split(",");
+                route_info = line.split(",");
+                String location = route_info[2] + " " + route_info[4] ;
                 if (routeHash.containsKey(route_info[2])){
                     ArrayList<Route> routeList = routeHash.get(route_info[2]);
                     Route route = new Route(route_info[0], route_info[1], route_info[2], route_info[3], route_info[4], route_info[5]);
@@ -72,6 +77,8 @@ public class Route {
                     routeList.add(route);
                     airport_route.put(route_info[2], routeList);
                     routeHash.put(route_info[2],routeList);
+                    portLine.put(route_info[4], route_info[0]);
+                    locationIATA.put(location, route_info[0]);
 
 
 
@@ -97,13 +104,28 @@ public class Route {
 
     }
 
-//    public static void main(String[] args) {
-//        Route.route_data();
-//        System.out.println(airport_route);
+    public static String portLine_Id(String location) {
+        String portLID = null;
+        if (locationIATA.containsKey(location)) {
+            portLID = locationIATA.get(location);
+        }
+
+        return portLID;
+
+    }
+
+
+
+    public static void main(String[] args) {
+        Route.route_data();
+        System.out.println(portLine);
+//        System.out.println(portLine.get("LHR"));
+        portLine_Id("ACC LHR");
 ////        System.out.println(routeHash);
 ////        System.out.println(route_details);
 //    }
 
 
 
+}
 }

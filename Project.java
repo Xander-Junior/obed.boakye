@@ -82,10 +82,14 @@ public class Project {
     public static void main(String[] args) {
         Route.route_data();
         Airports.airport_data();
+        Airlines.airline_data();
+        Route.route_data();
+
 
         String input_file = "/Users/xander/Documents/OneDrive - Ashesi University/ Academia/2nd Year Sem 2/Intermediate Computer Programming /Class Activities/ashesi/edu/gh/ICP313/input.txt";
         ArrayList<Airports> start_venue_port;
         ArrayList<Airports> end_venue_port;
+
 // program to read input file
         try {
             Airports.airport_data();
@@ -118,31 +122,42 @@ public class Project {
         }
 
         ArrayList out = route_find(code, endcode);
-        for(int i=1; i < out.size(); i++){
-            if (out.get(i) == null){
-                out.remove(i);
-                System.out.println(out);
-
-            }
-            System.out.println(out.get(i+1) + " from " + out.get(i) + " to ");
-        }
-
-        System.out.println(out);
-
-
-        PrintWriter outputWriter;
-// program to write to output file 
+        int i = 1; int j = 1;
+        PrintWriter outputWriter = null;
         try {
-            outputWriter = new PrintWriter(new FileOutputStream("output.txt"));
+            outputWriter = new PrintWriter(new FileOutputStream("_output.txt"));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        outputWriter.write(String.valueOf(out));
+        while(i < out.size()-1){
+            String loc = out.get(i) + " " + out.get(i+1);
+            Route.portLine_Id(loc);
+            String output = "\t" + j + ". " + Route.portLine_Id(loc)+ " from " + out.get(i) + " to " + out.get(i+1) + " 0 stops.";
+
+            System.out.println(output);
+
+            outputWriter.println(output);
+
+            i++;
+            j++;
+
+        }
+        i = i - 1;
+        outputWriter.println("\nTotal flights = " + i);
+        outputWriter.println("Total Additional stops = 0. ");
+
+        outputWriter.close();
+
+
+
+        }
 
 
 
 
-    }
+
+// program to write to output file
+
 
 
 

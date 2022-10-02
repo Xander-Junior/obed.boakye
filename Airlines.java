@@ -10,7 +10,7 @@ import java.util.HashMap;
 //method to read airline information
 public class Airlines {
     String airline_id, airline_name, airline_alias, IATA_code, ICAO_code, callsign, country;
-    static HashMap<String, String> airlineID_IATA = new HashMap<>();
+    static HashMap<String, String> airlineName_IATA = new HashMap<>();
     static HashMap<String, ArrayList> airlineHash = new HashMap<>();
     static ArrayList<Airlines> airline_details = new ArrayList<>();
 
@@ -49,9 +49,12 @@ public class Airlines {
             br = new BufferedReader(new FileReader("airlines.csv"));
             while ((line = br.readLine()) != null) {
                 String[] airline_info = line.split(",");
-                Airlines airline = new Airlines(airline_info[0], airline_info[1], airline_info[4], airline_info[5], airline_info[6]);
-                Airlines.airlineID_IATA.put(airline_info[0], airline_info[2]);
+                Airlines airline = new Airlines(airline_info[0], airline_info[1], airline_info[3], airline_info[5], airline_info[6]);
                 airline_details.add(airline);
+                if (airline_info[3] != null) {
+                    airlineName_IATA.put(airline_info[0], airline_info[3]);
+                }
+
 
             }
         } catch (FileNotFoundException fe) {
@@ -69,9 +72,14 @@ public class Airlines {
 
     public static void main(String[] args) {
         airline_data();
-//        System.out.println(airline_details.get(1018));
+        System.out.println(airline_details.get(0));
+        Airlines name = airline_details.get(0);
+
+
+
+
+        System.out.println(airlineName_IATA.get("Russia"));
+
 
     }
 }
-
-
